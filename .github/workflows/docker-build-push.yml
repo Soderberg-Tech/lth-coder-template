@@ -1,0 +1,67 @@
+name: Docker Push & Push
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+  push:
+    branches:
+      - 'master'
+      - 'testing'
+    paths-ignore:
+      - 'README.md'
+      - 'docker-compose.yml'
+  # Rebuild monthly to keep packages up to date
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v3
+        if: github.repository_owner == 'Swedish-Wiking'
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Docker Metadata
+        id: docker-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: swedishwiking/docker-wireguard-pia-python
+          tags: |
+            # Tag branches with branch name, but disable for default branch
+            type=ref,event=branch,enable=${{ github.ref_name != 'master' }}
+            # set latest tag for default branch
+            type=raw,value=latest,enable=${{ github.ref_name == 'master' }}
+      -
+        name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v5
+        with:
+          platforms: linux/amd64,linux/arm,linux/arm64
+          push: ${{ github.repository_owner == 'Swedish-Wiking' }}
+          tags: ${{ steps.docker-meta.outputs.tags }}
+          labels: ${{ steps.docker-meta.outputs.labels }}
+      -
+        name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
