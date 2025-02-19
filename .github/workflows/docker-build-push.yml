@@ -47,7 +47,7 @@ jobs:
         id: docker-meta
         uses: docker/metadata-action@v5
         with:
-          images: swedishwiking/docker-wireguard-pia-python
+          images: swedishwiking/lth-docker
           tags: |
             # Tag branches with branch name, but disable for default branch
             type=ref,event=branch,enable=${{ github.ref_name != 'master' }}
