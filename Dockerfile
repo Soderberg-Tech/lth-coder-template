@@ -13,6 +13,8 @@ RUN apt-get update \
 # Install Python
 RUN apt-get install -y \
 	python3 \
+ 	python3-venv \
+  	python3-pip \
 	python3-tk \
 	python-is-python3
 
