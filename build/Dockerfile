@@ -10,13 +10,24 @@ RUN apt-get update \
 	wget \
 	locales
 
+# Sets local
+RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG=en_US.utf8
+
 # Install Python
 RUN apt-get install -y \
 	python3 \
- 	python3-venv \
-  	python3-pip \
+    python3-pip \
+    python3-venv \
 	python3-tk \
 	python-is-python3
+
+# Install Python Packages
+RUN pip install \
+    requests \
+    rich \
+    ipykernel \
+	--break-system-packages
 
 # Install JAVA
 RUN apt-get install -y \
@@ -40,18 +51,11 @@ RUN apt-get install -y \
 	libcurl4-openssl-dev \
 	libssl-dev \
 	libxml2-dev \
-	libfontconfig1-dev
-    # && Rscript -e 'install.packages(c("languageserver", "ggplot2", "reshape2", "httpgd"))'
-
-# Install TeX-live
-# RUN apt-get install -y texlive-full
+	libfontconfig1-dev \
+    && Rscript -e 'install.packages(c("languageserver", "ggplot2", "reshape2", "httpgd"))'
 
 # Clears apt lists
 RUN rm -rf /var/lib/apt/lists/* 
-
-# Sets local
-RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-ENV LANG=en_US.utf8
 
 # Adds the default User
 ARG USER=lth-student
