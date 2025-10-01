@@ -8,6 +8,7 @@ RUN apt-get update \
 	sudo \
 	vim \
 	wget \
+	unzip \
 	locales
 
 # Sets local
@@ -35,7 +36,7 @@ RUN apt-get install -y \
 	openjdk-21-source
 
 # Install Scala
-ARG SCALA_VERSION="3.6.3"
+ARG SCALA_VERSION="3.7.3"
 ARG URL="https://github.com/scala/scala3/releases/download/${SCALA_VERSION}/scala3-${SCALA_VERSION}.tar.gz"
 ARG SCALA_DIR="/usr/share/scala3-${SCALA_VERSION}"
 RUN curl -fsL --show-error ${URL} | tar xfz - -C /usr/share && \
@@ -44,15 +45,22 @@ RUN curl -fsL --show-error ${URL} | tar xfz - -C /usr/share && \
 	chmod -R 755 /usr/share/scala && \
 	ln -s /usr/share/scala/bin/* /usr/local/bin
 
+# Install Gradle
+ARG GRADLE_VERSION="9.1.0"
+RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp
+RUN unzip -d /opt/gradle /tmp/gradle-${GRADLE_VERSION}-bin.zip
+RUN ln -s /opt/gradle/gradle-${VERSION} /opt/gradle/latest
+RUN export PATH=$PATH:/opt/gradle/latest/bin
+
 # Install R
-RUN apt-get install -y \
-	r-base \
-	build-essential \
-	libcurl4-openssl-dev \
-	libssl-dev \
-	libxml2-dev \
-	libfontconfig1-dev \
-    && Rscript -e 'install.packages(c("languageserver", "ggplot2", "reshape2", "httpgd"))'
+# RUN apt-get install -y \
+# 	r-base \
+# 	build-essential \
+# 	libcurl4-openssl-dev \
+# 	libssl-dev \
+# 	libxml2-dev \
+# 	libfontconfig1-dev \
+#     && Rscript -e 'install.packages(c("languageserver", "ggplot2", "reshape2", "httpgd"))'
 
 # Clears apt lists
 RUN rm -rf /var/lib/apt/lists/* 
