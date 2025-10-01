@@ -50,7 +50,8 @@ ARG GRADLE_VERSION="9.1.0"
 RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp
 RUN unzip -d /opt/gradle /tmp/gradle-${GRADLE_VERSION}-bin.zip
 RUN ln -s /opt/gradle/gradle-${GRADLE_VERSION} /opt/gradle/latest
-RUN export PATH=$PATH:/opt/gradle/latest/bin
+ENV GRADLE_HOME=/opt/gradle/latest
+ENV PATH=$PATH:$GRADLE_HOME/bin
 
 # Install R
 # RUN apt-get install -y \
