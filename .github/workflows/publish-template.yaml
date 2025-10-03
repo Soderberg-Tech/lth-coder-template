@@ -46,7 +46,7 @@ jobs:
         run: |
           coder templates push $TEMPLATE_NAME -d $GITHUB_WORKSPACE --activate=false --name ${{ steps.name.outputs.version_name }} --message "${{ steps.message.outputs.pr_title }}" --yes
 
-      - name: Create a test workspace and run some example commands
+      - name: Create a test workspace
         run: |
           coder create -t $TEMPLATE_NAME --template-version ${{ steps.name.outputs.version_name }} test-${{ steps.name.outputs.version_name }} --yes
 
@@ -57,4 +57,4 @@ jobs:
       - name: Promote template version
         if: success()
         run: |
-          coder template version promote --template=$TEMPLATE_NAME --template-version=${{ steps.name.outputs.version_name }} --yes
+          coder template version promote --template=$TEMPLATE_NAME --template-version=${{ steps.name.outputs.version_name }}
