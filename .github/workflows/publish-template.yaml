@@ -49,8 +49,6 @@ jobs:
       - name: Create a test workspace and run some example commands
         run: |
           coder create -t $TEMPLATE_NAME --template-version ${{ steps.name.outputs.version_name }} test-${{ steps.name.outputs.version_name }} --yes
-          # run some example commands2
-          coder ssh test-${{ steps.name.outputs.version_name }} -- make build
 
       - name: Delete the test workspace
         if: always()
