@@ -1,5 +1,9 @@
 name: Test and Publish Coder Template
 
+defaults:
+  run:
+    working-directory: ${{ github.workspace }}
+
 on:
   push:
     branches:
