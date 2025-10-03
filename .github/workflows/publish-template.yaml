@@ -1,9 +1,5 @@
 name: Test and Publish Coder Template
 
-defaults:
-  run:
-    working-directory: ${{ github.workspace }}
-
 on:
   push:
     branches:
@@ -48,7 +44,7 @@ jobs:
 
       - name: Push template to Coder
         run: |
-          coder templates push $TEMPLATE_NAME -d . --activate=false --name ${{ steps.name.outputs.version_name }} --message "${{ steps.message.outputs.pr_title }}" --yes
+          coder templates push $TEMPLATE_NAME -d $HOME --activate=false --name ${{ steps.name.outputs.version_name }} --message "${{ steps.message.outputs.pr_title }}" --yes
 
       - name: Create a test workspace and run some example commands
         run: |
