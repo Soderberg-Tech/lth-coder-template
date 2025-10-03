@@ -26,6 +26,9 @@ jobs:
           access_url: "https://coder.soderberg.tech"
           coder_session_token: ${{ secrets.CODER_SESSION_TOKEN }}
 
+      - name: Initilize Terraform
+        run: terraform init
+
       - name: Validate Terraform template
         run: terraform validate
 
