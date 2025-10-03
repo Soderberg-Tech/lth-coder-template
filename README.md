@@ -1,4 +1,4 @@
-# LTH Docker 
+# LTH Docker
 
 Create a workspace by pressing the button below!
 
