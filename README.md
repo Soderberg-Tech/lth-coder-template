@@ -7,13 +7,12 @@ Create a workspace by pressing the button below!
 ## Configure X11 capabilities
 
 1. Install a X Server on your device, [X410](https://x410.dev/) is recommended.
-    
-3. Open VS Code and add two entries to the ***coder.sshConfig*** setting (restart VS Code afterwards):
-	- `ForwardX11 yes`
-	- `ForwardX11Trusted yes`
 
-> You might need to input the following into a terminal on Windows: `setx DISPLAY "127.0.0.1:0.0"` if the X11 display can't be found. 
+2. Open VS Code and add two entries to the ***coder.sshConfig*** setting (restart VS Code afterwards):
+   - `ForwardX11 yes`
+   - `ForwardX11Trusted yes`
 
+> You might need to input the following into a terminal on Windows: `setx DISPLAY "127.0.0.1:0.0"` if the X11 display can't be found.
 
 ## Architecture
 
