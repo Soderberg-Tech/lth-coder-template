@@ -16,7 +16,7 @@ data "coder_workspace_owner" "me" {}
 
 locals {
   username = data.coder_workspace_owner.me.name
-  docker_name = "coder-${data.coder_workspace.me.template_name}-${local.username}-${data.coder_workspace.me.id}"
+  docker_name = lower("coder-${data.coder_workspace.me.template_name}-${local.username}-${data.coder_workspace.me.id}")
 }
 
 resource "coder_agent" "main" {
