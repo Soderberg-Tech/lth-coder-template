@@ -53,16 +53,6 @@ RUN ln -s /opt/gradle/gradle-${GRADLE_VERSION} /opt/gradle/latest
 ENV GRADLE_HOME=/opt/gradle/latest
 ENV PATH=$PATH:$GRADLE_HOME/bin
 
-# Install R
-# RUN apt-get install -y \
-# 	r-base \
-# 	build-essential \
-# 	libcurl4-openssl-dev \
-# 	libssl-dev \
-# 	libxml2-dev \
-# 	libfontconfig1-dev \
-#     && Rscript -e 'install.packages(c("languageserver", "ggplot2", "reshape2", "httpgd"))'
-
 # Clears apt lists
 RUN rm -rf /var/lib/apt/lists/* 
 
