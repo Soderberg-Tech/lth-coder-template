@@ -10,8 +10,11 @@ terraform {
 }
 
 provider "docker" {}
+
 data "coder_provisioner" "me" {}
+
 data "coder_workspace" "me" {}
+
 data "coder_workspace_owner" "me" {}
 
 locals {
@@ -75,15 +78,13 @@ resource "coder_agent" "main" {
 
 }
 
-module "code-server" {
-  count                 = data.coder_workspace.me.start_count
-  source                = "registry.coder.com/modules/code-server/coder"
-  version               = "1.0.29"
-  display_name          = "VS Code WEB"
-  agent_id              = coder_agent.main.id
-  install_prefix        = "/home/${local.username}/.vscode-web"
-  folder                = "/home/${local.username}"
-  use_cached_extensions = true
+module "vscode-web" {
+  count          = data.coder_workspace.me.start_count
+  source         = "registry.coder.com/coder/vscode-web/coder"
+  version        = "1.4.1"
+  agent_id       = coder_agent.main.id
+  folder         = "/home/${local.username}"
+  accept_license = true
   extensions            = [
     "scalameta.metals",
     "James-Yu.latex-workshop",
@@ -105,6 +106,12 @@ module "code-server" {
   }
 }
 
+module "git-config" {
+  count                 = data.coder_workspace.me.start_count
+  source                = "registry.coder.com/coder/git-config/coder"
+  version               = "1.0.31"
+  agent_id              = coder_agent.main.id
+}
 
 resource "docker_volume" "home_volume" {
   name = local.docker_name
