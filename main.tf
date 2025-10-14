@@ -11,6 +11,7 @@ terraform {
 
 locals {
   username = data.coder_workspace_owner.me.name
+  docker_name = "coder-${data.coder_workspace.template_name}-${data.coder_workspace_owner.me.name}-${data.coder_workspace.id}"
 }
 
 data "coder_provisioner" "me" {
@@ -111,7 +112,7 @@ module "code-server" {
 
 
 resource "docker_volume" "home_volume" {
-  name = "coder-${data.coder_workspace.me.id}-home"
+  name = local.docker_name
   # Protect the volume from being deleted due to changes in attributes.
   lifecycle {
     ignore_changes = all
@@ -138,7 +139,7 @@ resource "docker_volume" "home_volume" {
 }
 
 resource "docker_image" "main" {
-  name = "coder-${data.coder_workspace.me.id}"
+  name = local.docker_name
   build {
     context = "./build"
     build_args = {
