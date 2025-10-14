@@ -9,20 +9,15 @@ terraform {
   }
 }
 
+provider "docker" {}
+data "coder_provisioner" "me" {}
+data "coder_workspace" "me" {}
+data "coder_workspace_owner" "me" {}
+
 locals {
   username = data.coder_workspace_owner.me.name
   docker_name = "coder-${data.coder_workspace.template_name}-${data.coder_workspace_owner.me.name}-${data.coder_workspace.id}"
 }
-
-data "coder_provisioner" "me" {
-}
-
-provider "docker" {
-}
-
-data "coder_workspace" "me" {
-}
-data "coder_workspace_owner" "me" {}
 
 resource "coder_agent" "main" {
   arch           = data.coder_provisioner.me.arch
