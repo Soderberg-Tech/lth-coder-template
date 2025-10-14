@@ -16,6 +16,7 @@ data "coder_workspace_owner" "me" {}
 
 locals {
   username = data.coder_workspace_owner.me.name
+  docker_name = "coder-${data.coder_workspace.me.template_name}-${local.username}-${data.coder_workspace.me.id}"
 }
 
 resource "coder_agent" "main" {
@@ -106,7 +107,7 @@ module "code-server" {
 
 
 resource "docker_volume" "home_volume" {
-  name = "coder-${data.coder_workspace.template_name}-${local.username}-${data.coder_workspace.id}"
+  name = local.docker_name
   # Protect the volume from being deleted due to changes in attributes.
   lifecycle {
     ignore_changes = all
@@ -133,7 +134,7 @@ resource "docker_volume" "home_volume" {
 }
 
 resource "docker_image" "main" {
-  name = "coder-${data.coder_workspace.template_name}-${local.username}-${data.coder_workspace.id}"
+  name = local.docker_name
   build {
     context = "./build"
     build_args = {
