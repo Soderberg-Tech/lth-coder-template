@@ -1,9 +1,5 @@
 # LTH Docker
 
-Create a workspace by pressing the button below!
-
-[![Open in Coder](https://coder.soderberg.tech/open-in-coder.svg)](https://coder.soderberg.tech/templates/LTH/workspace)
-
 ## Configure X11 capabilities
 
 1. Install a X Server on your device, [X410](https://x410.dev/) is recommended.
@@ -21,4 +17,4 @@ This template provisions the following resources:
 - Docker image (built by Docker socket and kept locally)
 - Docker volume (persistent on `/home/{User}`)
 
-This means, when the workspace restarts, any tools or files outside of the home directory are not persisted. To pre-bake tools into the workspace (e.g. `python3`), modify the container image.
+This means, when the workspace restarts, any tools or files outside of the home directory are not persisted.
