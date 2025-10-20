@@ -1,12 +1,9 @@
 FROM ubuntu:latest AS base
 
-# Copy Java from openjdk:26-oracle
-COPY --from=openjdk:21 /usr/java/openjdk-21 /usr/java/openjdk-21
-ENV JAVA_HOME=/usr/java/openjdk-21
-
 # Copy Gradle from gradle:latest
 COPY --from=gradle:latest /opt/gradle /opt/gradle
 ENV GRADLE_HOME=/opt/gradle
+ENV PATH="${GRADLE_HOME}/bin:${PATH}"
 
 # Update and install dependencies
 RUN apt-get -y update
@@ -40,7 +37,14 @@ RUN pip install \
     ipykernel \
 	--break-system-packages
 
-FROM python-init AS scala
+FROM python-init AS java-init
+
+# Install JAVA
+RUN apt-get install -y \
+	default-jdk \
+	openjdk-21-source
+
+FROM java-init AS scala
 
 # Install Scala
 ARG SCALA_VERSION="3.7.3"
