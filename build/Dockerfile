@@ -1,8 +1,18 @@
-FROM ubuntu:latest
+FROM python:slim AS base
 
-# Updates and installs commons
-RUN apt-get update \
-	&& apt-get install -y \
+# Copy Java from openjdk:26-oracle
+ENV JAVA_HOME=/usr/java/openjdk-26
+COPY --from=openjdk:26-oracle $JAVA_HOME $JAVA_HOME
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+# Copy Gradle from gradle:latest
+ENV GRADLE_HOME=/opt/gradle
+COPY --from=gradle:latest $GRADLE_HOME $GRADLE_HOME
+ENV PATH="${GRADLE_HOME}/bin:${PATH}"
+
+# Update and install dependencies
+RUN apt-get -y update
+RUN apt-get install -y \
 	curl \
 	git \
 	sudo \
@@ -15,25 +25,15 @@ RUN apt-get update \
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG=en_US.utf8
 
-# Install Python
-RUN apt-get install -y \
-	python3 \
-    python3-pip \
-    python3-venv \
-	python3-tk \
-	python-is-python3
+FROM base AS requirements
 
 # Install Python Packages
-RUN pip install \
+RUN pip3 install \
     requests \
     rich \
-    ipykernel \
-	--break-system-packages
+    ipykernel
 
-# Install JAVA
-RUN apt-get install -y \
-	default-jdk \
-	openjdk-21-source
+FROM requirements AS scala
 
 # Install Scala
 ARG SCALA_VERSION="3.7.3"
@@ -46,12 +46,14 @@ RUN curl -fsL --show-error ${URL} | tar xfz - -C /usr/share && \
 	ln -s /usr/share/scala/bin/* /usr/local/bin
 
 # Install Gradle
-ARG GRADLE_VERSION="9.1.0"
-RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp
-RUN unzip -d /opt/gradle /tmp/gradle-${GRADLE_VERSION}-bin.zip
-RUN ln -s /opt/gradle/gradle-${GRADLE_VERSION} /opt/gradle/latest
-ENV GRADLE_HOME=/opt/gradle/latest
-ENV PATH=$PATH:$GRADLE_HOME/bin
+# ARG GRADLE_VERSION="9.1.0"
+# RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp
+# RUN unzip -d /opt/gradle /tmp/gradle-${GRADLE_VERSION}-bin.zip
+# RUN ln -s /opt/gradle/gradle-${GRADLE_VERSION} /opt/gradle/latest
+# ENV GRADLE_HOME=/opt/gradle/latest
+# ENV PATH=$PATH:$GRADLE_HOME/bin
+
+FROM scala AS lth
 
 # Clears apt lists
 RUN rm -rf /var/lib/apt/lists/* 
