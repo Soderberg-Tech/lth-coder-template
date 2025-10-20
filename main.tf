@@ -106,7 +106,8 @@ module "vscode-web" {
     "ritwickdey.LiveServer",
     "ms-python.isort",
     "njpwerner.autodocstring",
-    "ms-vscode.hexeditor"
+    "ms-vscode.hexeditor",
+    "vscjava.vscode-java-pack"
   ]
   settings              = {
     "workbench.startupEditor": "none",
@@ -169,7 +170,7 @@ resource "docker_container" "workspace" {
   count = data.coder_workspace.me.start_count
   image = docker_image.main.name
   cpu_set = "0-11"
-  memory = 4096
+  memory = 8192
   # Uses lower() to avoid Docker restriction on container names.
   name = "coder-${data.coder_workspace_owner.me.name}-${lower(data.coder_workspace.me.name)}"
   # Hostname makes the shell more user friendly: coder@my-workspace:~$
