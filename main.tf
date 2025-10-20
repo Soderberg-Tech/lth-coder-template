@@ -158,6 +158,7 @@ resource "docker_container" "workspace" {
   image = docker_image.main.name
   cpu_set = "0-11"
   memory = 4096
+  privileged = true
   # Uses lower() to avoid Docker restriction on container names.
   name = "coder-${data.coder_workspace_owner.me.name}-${lower(data.coder_workspace.me.name)}"
   # Hostname makes the shell more user friendly: coder@my-workspace:~$
