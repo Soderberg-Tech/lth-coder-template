@@ -70,6 +70,4 @@ RUN useradd --groups sudo --no-create-home --shell /bin/bash ${USER} \
 # Sets user and work directory
 USER ${USER}
 WORKDIR /home/${USER}
-
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
 ENV PATH="${GRADLE_HOME}/bin:${PATH}"
