@@ -25,6 +25,9 @@ locals {
 resource "coder_agent" "main" {
   arch           = data.coder_provisioner.me.arch
   os             = "linux"
+  display_apps {
+    vscode = false
+  }
   startup_script = <<-EOT
     set -e
 
