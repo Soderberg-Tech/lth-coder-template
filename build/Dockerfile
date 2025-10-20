@@ -1,4 +1,4 @@
-FROM python:trixie AS base
+FROM python:slim-bookworm AS base
 
 # Copy Java from openjdk:26-oracle
 ENV JAVA_HOME=/usr/java/openjdk-26
