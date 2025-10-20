@@ -1,13 +1,13 @@
 FROM python:slim-bookworm AS base
 
 # Copy Java from openjdk:26-oracle
-ENV JAVA_HOME=/usr/java/openjdk-26
-COPY --from=openjdk:26-oracle $JAVA_HOME $JAVA_HOME
+COPY --from=openjdk:21 /usr/java/openjdk-21 /usr/java/openjdk-21
+ENV JAVA_HOME=/usr/java/openjdk-21
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Copy Gradle from gradle:latest
+COPY --from=gradle:latest /opt/gradle /opt/gradle
 ENV GRADLE_HOME=/opt/gradle
-COPY --from=gradle:latest $GRADLE_HOME $GRADLE_HOME
 ENV PATH="${GRADLE_HOME}/bin:${PATH}"
 
 # Update and install dependencies
@@ -58,17 +58,11 @@ FROM scala AS lth
 # Clears apt lists
 RUN rm -rf /var/lib/apt/lists/* 
 
-
-
 # Adds the default User
 ARG USER=lth-student
 RUN useradd --groups sudo --no-create-home --shell /bin/bash ${USER} \
 	&& echo "${USER} ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/${USER} \
 	&& chmod 0440 /etc/sudoers.d/${USER}
-
-# Create home directory and set ownership
-USER root
-RUN mkdir -p /home/${USER} && chown -R ${USER}:${USER} /home/${USER}
 
 # Sets user and work directory
 USER ${USER}
