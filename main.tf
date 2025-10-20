@@ -78,6 +78,15 @@ resource "coder_agent" "main" {
 
 }
 
+module "vscode" {
+  count       = data.coder_workspace.me.start_count
+  source      = "registry.coder.com/coder/vscode-desktop/coder"
+  version     = "1.1.1"
+  agent_id    = coder_agent.main.id
+  folder      = "/home/${local.username}"
+  open_recent = true
+}
+
 module "vscode-web" {
   count          = data.coder_workspace.me.start_count
   source         = "registry.coder.com/coder/vscode-web/coder"
