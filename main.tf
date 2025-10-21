@@ -190,7 +190,7 @@ resource "docker_container" "workspace" {
 
   labels {
     label = "net.unraid.docker.icon"
-    value = "https://upload.wikimedia.org/wikipedia/commons/1/16/Ubuntu_and_Ubuntu_Server_Icon.png"
+    value = "https://soderberg.tech/assets/unraid/ubuntu-logo.png"
   }
 
   # Add labels in Docker to keep track of orphan resources.
