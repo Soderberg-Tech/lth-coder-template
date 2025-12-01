@@ -9,6 +9,7 @@ ENV PATH="${GRADLE_HOME}/bin:${PATH}"
 RUN apt-get -y update
 RUN apt-get install -y \
 	curl \
+	jq \
 	git \
 	sudo \
 	vim \
@@ -25,16 +26,16 @@ FROM base AS python-init
 # Install Python
 RUN apt-get install -y \
 	python3 \
-    python3-pip \
-    python3-venv \
+	python3-pip \
+	python3-venv \
 	python3-tk \
 	python-is-python3
 
 # Install Python Packages
 RUN pip install \
-    requests \
-    rich \
-    ipykernel \
+	requests \
+	rich \
+	ipykernel \
 	--break-system-packages
 
 FROM python-init AS java-init

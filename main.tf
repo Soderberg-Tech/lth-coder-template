@@ -127,6 +127,13 @@ module "git-config" {
   allow_email_change    = true
 }
 
+module "git-commit-signing" {
+  count    = data.coder_workspace.me.start_count
+  source   = "registry.coder.com/coder/git-commit-signing/coder"
+  version  = "1.0.32"
+  agent_id = coder_agent.main.id
+}
+
 resource "docker_volume" "home_volume" {
   name = local.docker_name
   # Protect the volume from being deleted due to changes in attributes.
