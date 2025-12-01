@@ -48,7 +48,7 @@ jobs:
 
       - name: Create a test workspace
         run: |
-          coder create -t $TEMPLATE_NAME --template-version ${{ steps.name.outputs.version_name }} test-${{ steps.name.outputs.version_name }} --yes --parameter "username=TEST-GIT-NAME"
+          coder create -t $TEMPLATE_NAME --template-version ${{ steps.name.outputs.version_name }} test-${{ steps.name.outputs.version_name }} --yes --parameter "username=TEST-GIT-NAME,user_email=test@test.com"
 
       - name: Delete the test workspace
         if: always()
